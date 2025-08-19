@@ -1,0 +1,57 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %} <!-- ဒီလို ထည့်ပေးရမယ် -->
+    <meta charset="UTF-8">
+    <meta name="description" content="Responsive Online Shop">
+    <meta name="keywords" content="Online Shop, Buy, Products, E-commerce">
+    <meta name="author" content="Ko Gyi Ko Phyo">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Online Shop{% endblock %}</title>
+
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/product_card.css' %}">
+    <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/messages.css' %}">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo"><a href="{% url 'home' %}">OnlineShop</a></div>
+        <ul class="nav-links">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'shop' %}">Shop</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'logout' %}">Logout ({{ user.username }})</a></li>
+            <li><a href="{% url 'view_cart' %}">Cart</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Sign In</a></li>
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+    <!-- Page Content -->
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    <script src="{% static 'js/shop_filter.js' %}"></script>
+
+</body>
+
+</html>
