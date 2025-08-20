@@ -1,5 +1,13 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
+from .api_views import CategoryViewSet, ProductViewSet, CartItemViewSet, UserAuthView, UserRegisterView
+
+# Create a router for API endpoints
+router = DefaultRouter()
+router.register(r'categories', CategoryViewSet)
+router.register(r'products', ProductViewSet)
+router.register(r'cart', CartItemViewSet, basename='cart')
 
 urlpatterns = [
     # Home & Shop
@@ -16,6 +24,11 @@ urlpatterns = [
     path('cart/checkout/', views.checkout, name='checkout'),
     path('cart/add-with-quantity/<int:product_id>/', views.add_to_cart_with_quantity, name='add_to_cart_with_quantity'),
     path('cart/count/', views.get_cart_count, name='get_cart_count'),
+
+    # API Endpoints
+    path('api/', include(router.urls)),
+    path('api/auth/login/', UserAuthView.as_view(), name='api_login'),
+    path('api/auth/register/', UserRegisterView.as_view(), name='api_register'),
 
     path('signup/', views.signup_view, name='signup'),
     path('login/', views.login_view, name='login'),
